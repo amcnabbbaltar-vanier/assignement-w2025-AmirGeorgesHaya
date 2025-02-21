@@ -1,61 +1,39 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpeedBuff : MonoBehaviour
 {
     private float delay = 5f;
-
+    // Start is called before the first frame update
     void Start()
     {
         
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // Update logic can remain if needed
+        
     }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.CompareTag("Player"))
-        {
+    void OnTriggerEnter(Collider collider){
+        if(collider.CompareTag("Player")){
             Pickup(collider);
         }
-    }
 
-    void Pickup(Collider player)
-    {
-        // Get the CharacterMovement component
+    }
+    void Pickup(Collider player){
         CharacterMovement characterMovement = player.GetComponent<CharacterMovement>();
-
-        if (characterMovement != null)
-        {
-            // Double the speed multiplier
-            characterMovement.speedMultiplier *= 2;
-
-            // Start the coroutine to reset the speed multiplier after the delay
-            StartCoroutine(ResetSpeedMultiplier(characterMovement));
-
-            // Disable the buff object
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            // Log an error if CharacterMovement is not found
-            Debug.LogError("CharacterMovement component not found on player.");
-        }
+        player.GetComponent<CharacterMovement>().speedMultiplier *= 2;
+        StartCoroutine(ResetSpeedMultiplier(characterMovement));
+        gameObject.SetActive(false);
     }
-
-    // Coroutine to reset speed multiplier after a delay
-    IEnumerator ResetSpeedMultiplier(CharacterMovement characterMovement)
+     IEnumerator ResetSpeedMultiplier(CharacterMovement characterMovement)
     {
         // Wait for the specified delay (5 seconds)
         yield return new WaitForSeconds(delay);
 
-        // Reset the speed multiplier back to normal (half of what it was)
+        // Reset the speed multiplier back to normal
         characterMovement.speedMultiplier /= 2;
-
-        // Optional: Log message to confirm the reset
-        Debug.Log("Speed multiplier reset.");
     }
 }

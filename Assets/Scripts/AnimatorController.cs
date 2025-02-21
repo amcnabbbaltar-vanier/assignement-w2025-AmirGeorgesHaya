@@ -24,10 +24,12 @@ public class AnimatorController : MonoBehaviour
         animator.SetFloat("CharacterSpeed", rb.velocity.magnitude);
         animator.SetBool("IsGrounded", characterMovement.IsGrounded);
        
-        
-        //  if (Input.GetButtonUp("space"))
-        // {
-        //     animator.SetTrigger("doFlip");
-        // } 
+        if(characterMovement.CanFlip){
+        if (Input.GetButtonUp("Jump"))
+        {
+            animator.SetBool("isAir", true);
+        } 
+        }
+         
     }
 }
