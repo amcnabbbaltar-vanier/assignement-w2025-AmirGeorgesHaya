@@ -4,6 +4,9 @@ using Cinemachine;
 [RequireComponent(typeof(Rigidbody))] // Ensures that a Rigidbody component is attached to the GameObject
 public class CharacterMovement : MonoBehaviour
 {
+
+        private AudioSource audioSource;
+
     // ============================== Movement Settings ==============================
     [Header("Movement Settings")]
     [SerializeField] private float baseWalkSpeed = 5f;    // Base speed when walking
@@ -81,6 +84,8 @@ public class CharacterMovement : MonoBehaviour
     private void InitializeComponents()
     {
         rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
+        audioSource = GetComponent<AudioSource>();
+
         rb.freezeRotation = true; // Prevent Rigidbody from rotating due to physics interactions
         rb.interpolation = RigidbodyInterpolation.Interpolate; // Smooth physics interpolation
 
@@ -168,6 +173,7 @@ public class CharacterMovement : MonoBehaviour
                 rb.AddForce(Vector3.up*jumpForce,ForceMode.Impulse);
                 jumpRequest = false;
                 jumpStatus = 1f;
+                audioSource.Play();
             }
         }
     }
