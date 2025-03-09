@@ -1,33 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     private int currentHealth;
-    public Text ScoreText; // Reference to the UI Text element for displaying the score
-
     public Slider healthBar;
+    public TextMeshProUGUI ScoreText; // Reference to the TextMeshProUGUI component
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        // Load the current health from PlayerPrefs
+        currentHealth = PlayerPrefs.GetInt("PlayerHealth", maxHealth);
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
 
-        // Initialize the score text (optional)
-        if (ScoreText != null)
-        {
-            int score = PlayerPrefs.GetInt("score", 0);
-            ScoreText.text = "SCORE: " + score.ToString();
-        }
+        // Update the score text when the scene starts
+        UpdateScoreText();
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         healthBar.value = currentHealth;
+
+        // Save the current health to PlayerPrefs
+        PlayerPrefs.SetInt("PlayerHealth", currentHealth);
+        PlayerPrefs.Save();
+
         if (currentHealth <= 0)
         {
             Die();
@@ -36,8 +38,9 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        // Reset time scale and pause state before loading the new scene
-        Time.timeScale = 1f; // Ensure the game is unpaused
+        // Reset health to max when the player dies
+        PlayerPrefs.SetInt("PlayerHealth", maxHealth);
+        PlayerPrefs.Save();
 
         // Retrieve the current score from PlayerPrefs
         int score = PlayerPrefs.GetInt("score", 0);
@@ -55,7 +58,20 @@ public class PlayerHealth : MonoBehaviour
         PlayerPrefs.SetInt("score", score);
         PlayerPrefs.Save();
 
-        // Update the score text (if ScoreText is assigned)
+        // Update the score text in the UI
+        UpdateScoreText();
+
+        // Reload the current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+    }
+
+    void UpdateScoreText()
+    {
+        // Retrieve the current score from PlayerPrefs
+        int score = PlayerPrefs.GetInt("score", 0);
+
+        // Update the score text in the UI (if ScoreText is assigned)
         if (ScoreText != null)
         {
             ScoreText.text = "SCORE: " + score.ToString();
@@ -64,9 +80,5 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.LogWarning("ScoreText reference is null! Assign the ScoreText UI element in the Inspector.");
         }
-
-        // Reload the current scene
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
     }
 }
