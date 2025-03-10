@@ -21,7 +21,16 @@ SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
 
  
  public void Restart(){
-    Debug.Log("Restarting");
-SceneManager.LoadScene(1);
+   // Reset the timer before loading the scene
+        if (Timer.Instance != null)
+        {
+            Timer.Instance.ResetTimer();
+            Timer.Instance.ResumeTimer();
+        }
+
+        // Load the first level (assuming Level 1 is at build index 1)
+        SceneManager.LoadScene(1);
+    
+
  }
 }

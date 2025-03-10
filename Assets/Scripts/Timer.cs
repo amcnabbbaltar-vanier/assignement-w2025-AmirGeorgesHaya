@@ -71,7 +71,7 @@ public class Timer : MonoBehaviour
         }
     }
 
-    void UpdateTimerDisplay()
+    public void UpdateTimerDisplay()
     {
         // Convert elapsed time to minutes and seconds
         int minutes = Mathf.FloorToInt(elapsedTime / 60f);
