@@ -5,7 +5,7 @@ using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
+    public int maxHealth = 3;
     private int currentHealth;
     public Slider healthBar;
     public TextMeshProUGUI ScoreText; // Reference to the TextMeshProUGUI component
@@ -81,4 +81,13 @@ public class PlayerHealth : MonoBehaviour
             Debug.LogWarning("ScoreText reference is null! Assign the ScoreText UI element in the Inspector.");
         }
     }
-}
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        healthBar.value = currentHealth;
+
+        // Save the reset health to PlayerPrefs
+        PlayerPrefs.SetInt("PlayerHealth", currentHealth);
+        PlayerPrefs.Save();
+    }
+    }

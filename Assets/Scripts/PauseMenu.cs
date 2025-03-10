@@ -6,21 +6,33 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-
     public GameObject pauseMenuUI;
+    public PlayerHealth health;
     public Score score; // Reference to the Score script
 
     void Start()
     {
-        // Debug the score reference
-        if (score == null)
-        {
-            Debug.LogError("Score reference is not assigned in the Inspector!");
-        }
-        else
-        {
-            Debug.Log("Score reference is assigned correctly.");
-        }
+        score = FindObjectOfType<Score>();
+    if (score == null)
+    {
+        Debug.LogError("Score reference could not be found in the scene!");
+    }
+    else
+    {
+        Debug.Log("Score reference found: " + score.gameObject.name);
+    }
+
+    // Find the PlayerHealth component dynamically
+    health = FindObjectOfType<PlayerHealth>();
+    if (health == null)
+    {
+        Debug.LogError("PlayerHealth reference could not be found in the scene!");
+    }
+    else
+    {
+        Debug.Log("PlayerHealth reference found: " + health.gameObject.name);
+    }
+
     }
 
     void OnEnable()
@@ -74,26 +86,47 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
     }
 
-    public void Restart()
+   public void Restart()
+{
+    Debug.Log("Restart method called.");
+
+    // Check if the score reference is null
+    if (score == null)
     {
-        // Check if the score reference is null
-        if (score == null)
-        {
-            Debug.LogError("Score reference is null! Assign the Score component in the Inspector.");
-            return;
-        }
-
-        // Reset time scale and pause state before loading the new scene
-        Time.timeScale = 1f; // Ensure the game is unpaused
-        GameIsPaused = false;
-
-        // Call the Reset method from the Score script
-        score.Reset();
-
-        // Load the new scene
-        SceneManager.LoadScene("Level1");
+        Debug.LogError("Score reference is null! Assign the Score component in the Inspector.");
+        return;
+    }
+    else
+    {
+        Debug.Log("Score reference found: " + score.gameObject.name);
     }
 
+    // Check if the health reference is null
+    if (health == null)
+    {
+        Debug.LogError("PlayerHealth reference is null! Assign the PlayerHealth component in the Inspector.");
+        return;
+    }
+    else
+    {
+        Debug.Log("PlayerHealth reference found: " + health.gameObject.name);
+    }
+
+    // Reset the player's health
+    health.ResetHealth();
+
+    // Reset the score
+    score.Reset();
+
+    // Reset time scale and pause state before loading the new scene
+    Time.timeScale = 1f; // Ensure the game is unpaused
+    GameIsPaused = false;
+
+    // Load the new scene
+    Scene currentScene = SceneManager.GetActiveScene();
+    Debug.Log("Reloading scene: " + currentScene.name);
+    SceneManager.LoadScene(currentScene.name);
+}
     public void QuitGame()
     {
         // Reset time scale and pause state before loading the menu
@@ -103,4 +136,5 @@ public class PauseMenu : MonoBehaviour
         // Load the menu scene
         SceneManager.LoadScene("Menu");
     }
+
 }
