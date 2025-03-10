@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GoalController : MonoBehaviour
-
 {
     private void OnTriggerEnter(Collider other)
     {
@@ -12,10 +10,14 @@ public class GoalController : MonoBehaviour
         {
             Debug.Log("You've reached the goal");
 
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-           
+            // Store the current timer value before loading the next level
+            if (Timer.Instance != null)
+            {
+                PlayerPrefs.SetFloat("ElapsedTime", Timer.Instance.GetElapsedTime());
+                PlayerPrefs.Save();
+            }
 
-            StartCoroutine(NextLevel(0.1f)); 
+            StartCoroutine(NextLevel(0.1f));
         }
     }
 
@@ -24,8 +26,8 @@ public class GoalController : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         int currentScene = SceneManager.GetActiveScene().buildIndex;
-        int nextScene= currentScene+1;
-         if (nextScene < SceneManager.sceneCountInBuildSettings)
+        int nextScene = currentScene + 1;
+        if (nextScene < SceneManager.sceneCountInBuildSettings)
         {
             SceneManager.LoadScene(nextScene);
         }

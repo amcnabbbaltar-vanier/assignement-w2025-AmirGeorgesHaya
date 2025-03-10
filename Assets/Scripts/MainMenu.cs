@@ -18,4 +18,10 @@ SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
     Debug.Log("QUIT");
     Application.Quit();
  }
+
+ 
+ public void Restart(){
+    Debug.Log("Restarting");
+SceneManager.LoadScene(1);
+ }
 }

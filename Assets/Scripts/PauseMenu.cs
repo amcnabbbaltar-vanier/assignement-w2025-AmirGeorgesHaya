@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public PlayerHealth health;
     public Score score; // Reference to the Score script
+    public Timer timer; // Reference to the Timer script
 
     void Start()
     {
@@ -77,6 +78,10 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f; // Unpause the game
         GameIsPaused = false;
+          if (Timer.Instance != null)
+    {
+        Timer.Instance.ResumeTimer();
+    }
     }
 
     void Pause()
@@ -84,6 +89,10 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f; // Pause the game
         GameIsPaused = true;
+         if (Timer.Instance != null)
+    {
+        Timer.Instance.PauseTimer();
+    }
     }
 
    public void Restart()
@@ -121,7 +130,10 @@ public class PauseMenu : MonoBehaviour
     // Reset time scale and pause state before loading the new scene
     Time.timeScale = 1f; // Ensure the game is unpaused
     GameIsPaused = false;
-
+if (Timer.Instance != null)
+    {
+        Timer.Instance.ResumeTimer();
+    }
     // Load the new scene
     Scene currentScene = SceneManager.GetActiveScene();
     Debug.Log("Reloading scene: " + currentScene.name);
